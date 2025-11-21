@@ -2,11 +2,12 @@ use std::process::exit;
 
 use clap::Parser;
 
-use crate::cli::Cli;
+use crate::{cli::Cli, commands::root};
 
 mod cli;
 mod commands;
 mod envfile;
+mod loader;
 
 fn main() {
     let cli = Cli::parse();
@@ -16,9 +17,14 @@ fn main() {
         exit(1);
     }
 
-    match cli.command.unwrap() {
+    let result = match cli.command.unwrap() {
         cli::Command::Set => todo!(),
         cli::Command::Remove => todo!(),
-        cli::Command::List => todo!(),
+        cli::Command::List => root::handle_list(),
+    };
+
+    if let Err(e) = result {
+        println!("Error: {e}");
+        exit(1)
     }
 }

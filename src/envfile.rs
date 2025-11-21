@@ -7,7 +7,7 @@ pub enum EnvfileError {
     #[error("Key '{0}' not found.")]
     KeyNotFound(String),
 
-    #[error("Error on line {0}: {1}.")]
+    #[error("Bad format on line {0}: {1}.")]
     BadFormat(usize, EnvfileParseError),
 }
 
@@ -55,7 +55,7 @@ impl Envfile {
                     EnvfileParseError::AlreadyDefined(key),
                 ));
             }
-            vars.insert(key, value).unwrap();
+            vars.insert(key, value);
         }
 
         Ok(Self { variables: vars })
@@ -72,12 +72,20 @@ impl Envfile {
         Ok(())
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.variables.is_empty()
+    }
+
     pub fn get(&self, key: &str) -> Result<&String> {
         if let Some(v) = self.variables.get(&key.to_string()) {
             Ok(v)
         } else {
             Err(EnvfileError::KeyNotFound(key.to_string()).into())
         }
+    }
+
+    pub fn get_all(&self) -> &IndexMap<String, String> {
+        &self.variables
     }
 
     pub fn remove(&mut self, key: &str) -> Result<()> {
