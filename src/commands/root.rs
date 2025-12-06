@@ -2,7 +2,9 @@ use std::fs;
 
 use anyhow::Result;
 use anyhow::anyhow;
+use anyhow::bail;
 
+use crate::cli::RemoveArgs;
 use crate::{cli::SetArgs, loader};
 
 pub fn handle_set(args: SetArgs) -> Result<()> {
@@ -43,6 +45,22 @@ pub fn handle_list() -> Result<()> {
     Ok(())
 }
 
-pub fn handle_remove() -> Result<()> {
+pub fn handle_remove(args: RemoveArgs) -> Result<()> {
+    let mut envfile = loader::load_env()?;
+
+    if envfile.is_empty() {
+        println!("No keys in env file.");
+        return Ok(());
+    }
+
+    if args.name.is_none() {
+        bail!("No key name provided.");
+    }
+
+    envfile.remove(&args.name.unwrap())?;
+
+    let content = envfile.dump();
+    fs::write(".env", content).map_err(|_| anyhow!("An error in file system occurred."))?;
+
     Ok(())
 }

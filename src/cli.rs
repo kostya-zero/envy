@@ -1,6 +1,6 @@
 use clap::{Args, Parser, Subcommand};
 
-// An environment manager you'll envy
+/// An environment manager you'll envy
 #[derive(Parser)]
 #[command(
     about = env!("CARGO_PKG_DESCRIPTION"),
@@ -20,7 +20,7 @@ pub enum Command {
     Set(SetArgs),
 
     /// Remove a variable.
-    Remove,
+    Remove(RemoveArgs),
 
     /// List all available variables.
     List,
@@ -33,4 +33,10 @@ pub struct SetArgs {
 
     /// The value to set.
     pub values: Option<String>,
+}
+
+#[derive(Args)]
+pub struct RemoveArgs {
+    /// The key name to delete.
+    pub name: Option<String>,
 }
