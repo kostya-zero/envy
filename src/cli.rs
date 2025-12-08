@@ -22,6 +22,9 @@ pub enum Command {
     /// Set a value for variable. Can overwrite existing one.
     Set(SetArgs),
 
+    /// Get value of the key.
+    Get(GetArgs),
+
     /// Remove a variable.
     Remove(RemoveArgs),
 
@@ -36,6 +39,12 @@ pub struct SetArgs {
 
     /// The value to set.
     pub values: Option<String>,
+}
+
+#[derive(Args)]
+pub struct GetArgs {
+    /// The key name to get.
+    pub key: Option<String>,
 }
 
 #[derive(Args)]

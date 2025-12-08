@@ -7,6 +7,7 @@ use anyhow::anyhow;
 use anyhow::bail;
 use colored::Colorize;
 
+use crate::cli::GetArgs;
 use crate::cli::RemoveArgs;
 use crate::terminal::print_done;
 use crate::{cli::SetArgs, loader};
@@ -43,12 +44,12 @@ fn load_template_content(example_path: &Path) -> Result<String> {
 
 pub fn handle_set(args: SetArgs) -> Result<()> {
     if args.key.is_none() {
-        bail!("no key provided")
+        bail!("key name is required")
     }
     let key = args.key.unwrap();
 
     if args.values.is_none() {
-        bail!("no value provided")
+        bail!("value is required")
     }
     let value = args.values.unwrap();
     let mut envfile = loader::load_env(".env")?;
@@ -58,6 +59,22 @@ pub fn handle_set(args: SetArgs) -> Result<()> {
     }
 
     loader::save_env(".env", &envfile)?;
+    Ok(())
+}
+
+pub fn handle_get(args: GetArgs) -> Result<()> {
+    if args.key.is_none() {
+        bail!("key name is required")
+    }
+    let key = args.key.unwrap();
+
+    let envfile = loader::load_env(".env")?;
+    if let Ok(v) = envfile.get(&key) {
+        println!("{v}");
+    } else {
+        bail!("key not found");
+    }
+
     Ok(())
 }
 

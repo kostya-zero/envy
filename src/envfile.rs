@@ -77,11 +77,20 @@ impl Envfile {
     }
 
     pub fn get(&self, key: &str) -> Result<&String> {
-        if let Some(v) = self.variables.get(&key.to_string()) {
-            Ok(v)
-        } else {
-            Err(EnvfileError::KeyNotFound(key.to_string()).into())
+        // First try exact match for performance
+        if let Some(v) = self.variables.get(key) {
+            return Ok(v);
         }
+
+        // Fall back to case-insensitive search
+        let key_lower = key.to_lowercase();
+        for (k, v) in self.variables.iter() {
+            if k.to_lowercase() == key_lower {
+                return Ok(v);
+            }
+        }
+
+        Err(EnvfileError::KeyNotFound(key.to_string()).into())
     }
 
     pub fn get_all(&self) -> &IndexMap<String, String> {
