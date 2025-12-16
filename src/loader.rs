@@ -20,8 +20,8 @@ pub enum LoaderError {
 }
 
 pub fn load_env(path: &str) -> Result<Envfile> {
+    // FIXME: Do 'file not found' in read_to_string function instead
     let path = Path::new(&path);
-
     if !path.exists() {
         return Err(LoaderError::FileNotFound.into());
     }

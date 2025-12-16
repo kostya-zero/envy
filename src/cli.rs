@@ -35,20 +35,20 @@ pub enum Command {
 #[derive(Args)]
 pub struct SetArgs {
     /// The key name to insert/update.
-    pub key: Option<String>,
+    pub key: String,
 
     /// The value to set.
-    pub values: Option<String>,
+    pub value: String,
 }
 
 #[derive(Args)]
 pub struct GetArgs {
     /// The key name to get.
-    pub key: Option<String>,
+    pub key: String,
 }
 
 #[derive(Args)]
 pub struct RemoveArgs {
     /// The key name to delete.
-    pub name: Option<String>,
+    pub name: String,
 }

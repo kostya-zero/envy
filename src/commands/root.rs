@@ -13,8 +13,7 @@ use crate::terminal::print_done;
 use crate::{cli::SetArgs, loader};
 
 pub fn handle_new() -> Result<()> {
-    let cwd = env::current_dir().map_err(|e| anyhow!("failed to get current directory: {}", e))?;
-
+    let cwd = env::current_dir().map_err(|_| anyhow!("failed to get current directory:"))?;
     let env_path = cwd.join(".env");
     let env_example_path = cwd.join(".env.example");
 
@@ -43,33 +42,15 @@ fn load_template_content(example_path: &Path) -> Result<String> {
 }
 
 pub fn handle_set(args: SetArgs) -> Result<()> {
-    if args.key.is_none() {
-        bail!("key name is required")
-    }
-    let key = args.key.unwrap();
-
-    if args.values.is_none() {
-        bail!("value is required")
-    }
-    let value = args.values.unwrap();
     let mut envfile = loader::load_env(".env")?;
-
-    if let Err(e) = envfile.set(&key, &value) {
-        return Err(anyhow!(e));
-    }
-
+    envfile.set(&args.key, &args.value)?;
     loader::save_env(".env", &envfile)?;
     Ok(())
 }
 
 pub fn handle_get(args: GetArgs) -> Result<()> {
-    if args.key.is_none() {
-        bail!("key name is required")
-    }
-    let key = args.key.unwrap();
-
     let envfile = loader::load_env(".env")?;
-    if let Ok(v) = envfile.get(&key) {
+    if let Ok(v) = envfile.get(&args.key) {
         println!("{v}");
     } else {
         bail!("key not found");
@@ -95,12 +76,8 @@ pub fn handle_list() -> Result<()> {
 }
 
 pub fn handle_remove(args: RemoveArgs) -> Result<()> {
-    if args.name.is_none() {
-        bail!("No key name provided.");
-    }
-
     let mut envfile = loader::load_env(".env")?;
-    envfile.remove(&args.name.unwrap())?;
+    envfile.remove(&args.name)?;
 
     loader::save_env(".env", &envfile)?;
     Ok(())
