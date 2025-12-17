@@ -1,5 +1,7 @@
 # 📃 Envy
 
+![Crates.io Version](https://img.shields.io/crates/v/envy) ![GitHub branch check runs](https://img.shields.io/github/check-runs/kostya-zero/envy/main)
+
 The environment manager you'll *envy*. 
 Envy provides a user-friendly command-line interface to manage environment variables in `.env` files and generate new `.env` files from `.env.example` files.
 
