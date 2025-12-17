@@ -1,5 +1,5 @@
 use anyhow::Result;
-use std::{fs, path::Path};
+use std::fs;
 use thiserror::Error;
 
 use crate::envfile::Envfile;
