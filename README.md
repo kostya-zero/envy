@@ -1,6 +1,6 @@
 # `ev`
 
-![Crates.io Version](https://img.shields.io/crates/v/ev-manager) ![GitHub branch check runs](https://img.shields.io/github/check-runs/kostya-zero/ev-manager/main)
+![Crates.io Version](https://img.shields.io/crates/v/ev-manager) ![GitHub branch check runs](https://img.shields.io/github/check-runs/kostya-zero/ev/main)
 
 Control your environment.
 
